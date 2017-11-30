@@ -1,0 +1,1 @@
+"C:\Program Files\QGIS 2.18\bin\ogr2ogr.exe" -progress -f "PostgreSQL" PG:" dbname=uganda_gis host=localhost port=5432 user='postgres' password='mnzryv' active_schema=import_data" "G:\uganda_data\Uganda.gdb_Oct_25_2017\Uganda.gdb" Service_Territory -overwrite --config PG_USE_COPY YES

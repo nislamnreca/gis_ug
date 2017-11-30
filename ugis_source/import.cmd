@@ -1,0 +1,1 @@
+ogr2ogr.exe -progress -f "PostgreSQL" PG:" dbname=uganda_gis host=localhost port=5432 user='postgres' password='mnzryv' active_schema=import_data" "G:\uganda_data\Uganda.gdb_Oct_25_2017\Uganda.gdb" -overwrite --config PG_USE_COPY YES -dim XY -unsetFid -explodecollections -lco GEOMETRY_NAME=geom -lco PRECISION=NO -lco LAUNDER=YES -t_srs "EPSG:3857" -skipfailures

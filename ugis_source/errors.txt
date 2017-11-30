@@ -1,0 +1,33 @@
+psql:route_lv_changed_nzi.sql:58: ERROR:  duplicate key value violates unique constraint "master_edge_table_source_target_rev_idx"
+DETAIL:  Key (source, target, rev)=(12361209, 12361189, 10_kVA_18kWh) already exists.
+CONTEXT:  SQL statement "with  q40 AS (
+      SELECT
+        coalesce(s.cl_id,e.cl_id)  cl_id,
+        s.objectid source,
+        e.objectid target,
+        round(st_length(l.geom)) dist,
+        round(st_length(l.geom))^cost_pow "cost",
+        1 cost_mult,
+        'rd_to_rd' src_trgt_type,
+        in_loc loc,
+        in_rev rev,
+        l.geom
+      FROM geotools.roads  l
+        JOIN geotools.nodes s ON  st_dwithin(l.geom,s.geom,1) and st_dwithin(st_startpoint(l.geom),s.geom,0.0001)  and l.loc && ARRAY[in_loc]
+        JOIN geotools.nodes e ON  st_dwithin(l.geom,e.geom,1) and st_dwithin(st_endpoint(l.geom),e.geom,0.0001)
+       and l.loc && ARRAY[in_loc]
+
+  )
+    , q_edge_insert AS (
+    INSERT INTO geotools.master_edge_table
+    ( cl_id, source, target, dist, "cost", cost_mult, src_trgt_type, loc, rev, geom)
+      SELECT *
+      FROM q40
+    RETURNING 1 cnt
+  )
+  SELECT count(cnt)
+                 FROM q_edge_insert"
+PL/pgSQL function geotools.insert_rd_to_rd_edges(text,text,numeric) line 8 at SQL statement
+PL/pgSQL function inline_code_block line 41 at RAISE
+Time: 3301897.683 ms
+----------
